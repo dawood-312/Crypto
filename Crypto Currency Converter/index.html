@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Currency Converter</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+     <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="./style.css">
+    
+</head>
+<body>
+
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+          <div class="container">
+            <a class="navbar-brand" href="#">
+              <!-- <img src="your-logo.png" alt="Your Logo"> -->
+               <h3>CryptoLinks</h3>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="About.html">About</a>
+                </li>
+                <!-- <li class="nav-item">
+                  <a class="nav-link" href="#">Services</a>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link" href="Contact.html">Contact</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+
+
+    <div class="main">
+
+
+        <div class="converter-container">
+            <img src="https://cdn-icons-png.flaticon.com/512/1465/1465645.png" alt="" width="100px">
+            <h2>Crypto Currency Converter</h2>
+
+            <input type="number" class="form-control m-3" id="cryptoInput" placeholder="Enter amount">
+            <form>
+                <div class="form-group">
+                    <label for="cryptoSelect">Crypto:</label>
+                    <select id="cryptoSelect" class="form-control">
+                        <option>-select-</option>
+                        <option value="bitcoin">Bitcoin (BTC)</option>
+                        <option value="ethereum">Ethereum (ETH)</option>
+                        <option value="litecoin">Litecoin (LTC)</option>
+                        <option value="binancecoin">Binance Coin (BNB)</option>
+                        <option value="cardano">Cardano (ADA)</option>
+                        <option value="ripple">Ripple (XRP)</option>
+                        <option value="solana">Solana (SOL)</option>
+                        <option value="polkadot">Polkadot (DOT)</option>
+                        <option value="dogecoin">Dogecoin (DOGE)</option>
+                        <option value="chainlink">Chainlink (LINK)</option>
+                        <option value="bitcoin-cash">Bitcoin Cash (BCH)</option>
+                        <option value="stellar">Stellar (XLM)</option>
+                        <option value="terra">Terra (LUNA)</option>
+                        <option value="ethereum-classic">Ethereum Classic (ETC)</option>
+                        <option value="polygon">Polygon (MATIC)</option>
+                        <option value="vechain">VeChain (VET)</option>
+                        <option value="avalanche">Avalanche (AVAX)</option>
+                        <option value="uniswap">uniswap (UNI)</option>
+                        <option value="tron">Tron (TRX)</option>
+                    </select>
+                </div>
+                <h4>to</h4>
+                <div class="form-group">
+                    <label for="fiatSelect">Fiat:</label>
+                    <select id="fiatSelect" class="form-control">
+                        <option>-select-</option>
+                        <option value="usd">USD</option>
+                        <option value="eur">EUR</option>
+                        <option value="pkr">PKR</option>
+                        <option value="jpy">JPY</option>
+                        <option value="gbp">GBP</option>
+                        <option value="chf">CHF</option>
+                        <option value="cad">CAD</option>
+                        <option value="aud">AUD</option>
+                        <option value="aud">AUD</option>
+                        <option value="nzd">NZD</option>
+                        <option value="cny">CNY</option>
+                        <option value="inr">INR</option>
+                        <option value="rub">RUB</option>
+                        <option value="brl">BRL</option>
+                        <option value="krw">KRW</option>
+                        <option value="zar">ZAR</option>
+                        <option value="mxn">MXN</option>
+                        <option value="hkd">HKD</option>
+                        <option value="sgd">SGD</option>
+                        <option value="sgd">SGD</option>
+                    </select>
+                </div>
+            </form>
+            <button class="btn form-control" onclick="convertCrypto()">Convert</button>
+
+            <div class="result mt-3" style="display: none;">
+                <p id="conversionValue"></p>
+                <h2 id="conversionResult"></h2>
+            </div>
+        </div>
+        
+    </div>
+
+<!-- Crypto Table -->
+
+<div class="container mt-5">
+    <h2 class="mb-4">Top 50 Cryptocurrencies</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Symbol</th>
+          <th>Price (USD)</th>
+        </tr>
+      </thead>
+      <tbody id="cryptoTable">
+        <!-- Crypto data will be displayed here -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- JavaScript -->
+<script>
+    // Fetch top 50 cryptocurrencies
+    fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false')
+      .then(response => response.json())
+      .then(data => {
+        const cryptoTable = document.getElementById('cryptoTable');
+        data.forEach((crypto, index) => {
+          const row = `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${crypto.name}</td>
+              <td>${crypto.symbol.toUpperCase()}</td>
+              <td>$${crypto.current_price.toFixed(2)}</td>
+            </tr>
+          `;
+          cryptoTable.insertAdjacentHTML('beforeend', row);
+        });
+      });
+  </script>
+
+
+
+
+
+    
+
+
+
+    
+
+
+    
+
+    
+    <!-- Script JS -->
+    <script src="./script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
